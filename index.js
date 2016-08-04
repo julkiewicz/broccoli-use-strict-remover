@@ -12,13 +12,6 @@ function UseStrictRemover (inputTree, _options) {
     options.persist = true;
   }
   Filter.call(this, inputTree, options);
-
-  var matcher = options.matcher || /REMOVE_USE_STRICT: true/g;
-
-  delete options.matcher;
-  Filter.call(this, inputTree, options);
-
-  this.matcher = matcher;
 }
 
 UseStrictRemover.prototype = Object.create(Filter.prototype);
@@ -32,13 +25,7 @@ UseStrictRemover.prototype.baseDir = function() {
 };
 
 UseStrictRemover.prototype.processString = function(content) {
-  var output = content;
-
-  if (content.match(this.matcher)) {
-    output = content.replace(/["']use strict['"];\n/g, '');
-  }
-
-  return output;
+  return content.replace(/\s*["']use strict['"]\s*;/g, '');
 };
 
 module.exports = UseStrictRemover;
